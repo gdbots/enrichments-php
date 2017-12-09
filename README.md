@@ -29,6 +29,7 @@ services:
       - {name: monolog.logger, channel: gdbots.enrichments}
     bind:
       Psr\Log\LoggerInterface: '@monolog.logger.gdbots.enrichments'
+
 ```
 
 
