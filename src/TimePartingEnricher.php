@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Gdbots\Enrichments;
 
 use Gdbots\Pbj\WellKnown\Microtime;
+use Gdbots\Pbjx\DependencyInjection\PbjxEnricher;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Pbjx\EventSubscriber;
 use Gdbots\Schemas\Common\Enum\DayOfWeek;
 use Gdbots\Schemas\Common\Enum\Month;
 use Gdbots\Schemas\Enrichments\Mixin\TimeParting\TimeParting;
 
-final class TimePartingEnricher implements EventSubscriber
+final class TimePartingEnricher implements EventSubscriber, PbjxEnricher
 {
     /**
      * @param PbjxEvent $pbjxEvent

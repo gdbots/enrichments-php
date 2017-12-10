@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Gdbots\Enrichments;
 
+use Gdbots\Pbjx\DependencyInjection\PbjxEnricher;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Pbjx\EventSubscriber;
 use Gdbots\Schemas\Contexts\UserAgentV1;
@@ -11,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use UAParser\Parser;
 
-final class UaParserEnricher implements EventSubscriber
+final class UaParserEnricher implements EventSubscriber, PbjxEnricher
 {
     /** @var LoggerInterface $logger */
     private $logger;

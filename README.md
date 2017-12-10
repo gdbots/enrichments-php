@@ -26,9 +26,9 @@ services:
   Gdbots\Enrichments\:
     resource: '%kernel.project_dir%/vendor/gdbots/enrichments/src/*'
     tags:
-      - {name: monolog.logger, channel: gdbots.enrichments}
+      - {name: monolog.logger, channel: enrichments}
     bind:
-      Psr\Log\LoggerInterface: '@monolog.logger.gdbots.enrichments'
+      Psr\Log\LoggerInterface: '@monolog.logger.enrichments'
 
 ```
 

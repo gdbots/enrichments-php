@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Gdbots\Enrichments;
 
 use Gdbots\Pbj\WellKnown\Microtime;
+use Gdbots\Pbjx\DependencyInjection\PbjxEnricher;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Pbjx\EventSubscriber;
 use Gdbots\Schemas\Enrichments\Mixin\TimeSampling\TimeSampling;
 
-final class TimeSamplingEnricher implements EventSubscriber
+final class TimeSamplingEnricher implements EventSubscriber, PbjxEnricher
 {
     /**
      * @param PbjxEvent $pbjxEvent
