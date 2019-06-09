@@ -78,7 +78,7 @@ final class UaParserEnricher implements EventSubscriber, PbjxEnricher
     public static function getSubscribedEvents()
     {
         return [
-            'gdbots:enrichments:mixin:ua-parser.enrich' => [['enrich', 5000]],
+            'gdbots:enrichments:mixin:ua-parser.enrich' => ['enrich', 5000],
         ];
     }
 }

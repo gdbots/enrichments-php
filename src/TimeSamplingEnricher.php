@@ -41,7 +41,7 @@ final class TimeSamplingEnricher implements EventSubscriber, PbjxEnricher
     public static function getSubscribedEvents()
     {
         return [
-            'gdbots:enrichments:mixin:time-sampling.enrich' => [['enrich', 5000]],
+            'gdbots:enrichments:mixin:time-sampling.enrich' => ['enrich', 5000],
         ];
     }
 }

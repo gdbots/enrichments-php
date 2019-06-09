@@ -51,7 +51,7 @@ final class TimePartingEnricher implements EventSubscriber, PbjxEnricher
     public static function getSubscribedEvents()
     {
         return [
-            'gdbots:enrichments:mixin:time-parting.enrich' => [['enrich', 5000]],
+            'gdbots:enrichments:mixin:time-parting.enrich' => ['enrich', 5000],
         ];
     }
 }

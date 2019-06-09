@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.1",
-    "gdbots/pbjx": "^2.1.1",
+    "gdbots/pbjx": "^2.3",
     "ua-parser/uap-php": "^3.4"
   },
   "require-dev": {
@@ -23,10 +23,5 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.1.x-dev"
-    }
   }
 }
