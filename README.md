@@ -2,8 +2,6 @@ enrichments-php
 =============
 
 [![Build Status](https://api.travis-ci.org/gdbots/enrichments-php.svg)](https://travis-ci.org/gdbots/enrichments-php)
-[![Code Climate](https://codeclimate.com/github/gdbots/enrichments-php/badges/gpa.svg)](https://codeclimate.com/github/gdbots/enrichments-php)
-[![Test Coverage](https://codeclimate.com/github/gdbots/enrichments-php/badges/coverage.svg)](https://codeclimate.com/github/gdbots/enrichments-php/coverage)
 
 Php library that provides implementations for __gdbots:enrichments__ schemas.   Using this library assumes
 that you've already created and compiled your own pbj classes using the [Pbjc](https://github.com/gdbots/pbjc-php)

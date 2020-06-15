@@ -4,12 +4,12 @@
   "type": "library",
   "license": "Apache-2.0",
   "require": {
-    "php": ">=7.1",
-    "gdbots/pbjx": "^2.3",
-    "ua-parser/uap-php": "^3.4"
+    "php": ">=7.4",
+    "gdbots/pbjx": "^3.0",
+    "ua-parser/uap-php": "^3.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.4"
+    "phpunit/phpunit": "^9.2"
   },
   "autoload": {
     "psr-4": {

@@ -3,46 +3,46 @@ declare(strict_types=1);
 
 namespace Gdbots\Enrichments;
 
+use Gdbots\Pbj\Util\NumberUtil;
 use Gdbots\Pbjx\DependencyInjection\PbjxEnricher;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Pbjx\EventSubscriber;
 use Gdbots\Schemas\Contexts\UserAgentV1;
-use Gdbots\Schemas\Enrichments\Mixin\UaParser\UaParser;
+use Gdbots\Schemas\Enrichments\Mixin\UaParser\UaParserV1Mixin;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use UAParser\Parser;
 
 final class UaParserEnricher implements EventSubscriber, PbjxEnricher
 {
-    /** @var LoggerInterface $logger */
-    private $logger;
+    private LoggerInterface $logger;
+    private Parser $parser;
 
-    /** @var Parser $parser */
-    private $parser;
+    public static function getSubscribedEvents()
+    {
+        return [
+            UaParserV1Mixin::SCHEMA_CURIE . '.enrich' => ['enrich', 5000],
+        ];
+    }
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function __construct(?LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();
         $this->parser = Parser::create();
     }
 
-    /**
-     * @param PbjxEvent $pbjxEvent
-     */
     public function enrich(PbjxEvent $pbjxEvent): void
     {
-        /** @var UaParser $message */
         $message = $pbjxEvent->getMessage();
-        if (!$message->has('ctx_ua') || $message->has('ctx_ua_parsed')) {
+        if (!$message->has(UaParserV1Mixin::CTX_UA_FIELD)
+            || $message->has(UaParserV1Mixin::CTX_UA_PARSED_FIELD)
+        ) {
             return;
         }
 
         try {
-            $result = $this->parser->parse($message->get('ctx_ua'));
-        } catch (\Exception $e) {
+            $result = $this->parser->parse($message->get(UaParserV1Mixin::CTX_UA_FIELD));
+        } catch (\Throwable $e) {
             $this->logger->warning('User agent could not be parsed from message [{pbj_schema}].', [
                 'exception'  => $e,
                 'pbj_schema' => $message::schema()->getId()->toString(),
@@ -53,32 +53,22 @@ final class UaParserEnricher implements EventSubscriber, PbjxEnricher
 
         try {
             $userAgent = UserAgentV1::create()
-                ->set('br_family', $result->ua->family)
-                ->set('br_major', (int)$result->ua->major)
-                ->set('br_minor', (int)$result->ua->minor)
-                ->set('br_patch', (int)$result->ua->patch)
-                ->set('os_family', $result->os->family)
-                ->set('os_major', (int)$result->os->major)
-                ->set('os_minor', (int)$result->os->minor)
-                ->set('os_patch', (int)$result->os->patch)
-                ->set('os_patch_minor', (int)$result->os->patchMinor)
-                ->set('dvce_family', $result->device->family);
-            $message->set('ctx_ua_parsed', $userAgent);
-        } catch (\Exception $e) {
+                ->set(UserAgentV1::BR_FAMILY_FIELD, $result->ua->family)
+                ->set(UserAgentV1::BR_MAJOR_FIELD, (int)$result->ua->major)
+                ->set(UserAgentV1::BR_MINOR_FIELD, (int)$result->ua->minor)
+                ->set(UserAgentV1::BR_PATCH_FIELD, NumberUtil::bound((int)$result->ua->patch, 0, 65535))
+                ->set(UserAgentV1::OS_FAMILY_FIELD, $result->os->family)
+                ->set(UserAgentV1::OS_MAJOR_FIELD, (int)$result->os->major)
+                ->set(UserAgentV1::OS_MINOR_FIELD, (int)$result->os->minor)
+                ->set(UserAgentV1::OS_PATCH_FIELD, NumberUtil::bound((int)$result->os->patch, 0, 65535))
+                ->set(UserAgentV1::OS_PATCH_MINOR_FIELD, NumberUtil::bound((int)$result->os->patchMinor, 0, 65535))
+                ->set(UserAgentV1::DVCE_FAMILY_FIELD, $result->device->family);
+            $message->set(UaParserV1Mixin::CTX_UA_PARSED_FIELD, $userAgent);
+        } catch (\Throwable $e) {
             $this->logger->warning(
                 sprintf('Parsed user agent [%s] could not be added to message.', $result->toString()),
                 ['exception' => $e, 'pbj' => $message->toArray()]
             );
         }
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'gdbots:enrichments:mixin:ua-parser.enrich' => ['enrich', 5000],
-        ];
     }
 }
