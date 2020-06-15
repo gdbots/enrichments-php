@@ -7,41 +7,35 @@ use Gdbots\Pbj\WellKnown\Microtime;
 use Gdbots\Pbjx\DependencyInjection\PbjxEnricher;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Pbjx\EventSubscriber;
-use Gdbots\Schemas\Enrichments\Mixin\TimeSampling\TimeSampling;
+use Gdbots\Schemas\Enrichments\Mixin\TimeSampling\TimeSamplingV1Mixin;
+use Gdbots\Schemas\Pbjx\Mixin\Event\EventV1Mixin;
 
 final class TimeSamplingEnricher implements EventSubscriber, PbjxEnricher
 {
-    /**
-     * @param PbjxEvent $pbjxEvent
-     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            TimeSamplingV1Mixin::SCHEMA_CURIE . '.enrich' => ['enrich', 5000],
+        ];
+    }
+
     public function enrich(PbjxEvent $pbjxEvent): void
     {
-        /** @var TimeSampling $message */
         $message = $pbjxEvent->getMessage();
-        $date = $message->get('occurred_at');
+        $date = $message->get(EventV1Mixin::OCCURRED_AT_FIELD);
 
         if ($date instanceof Microtime) {
             $date = $date->toDateTime();
         }
 
-        if (!$date instanceof \DateTime) {
+        if (!$date instanceof \DateTimeInterface) {
             // no "occurred_at" field to pull from.
             return;
         }
 
         $message
-            ->set('ts_ymdh', (int)$date->format('YmdH'))
-            ->set('ts_ymd', (int)$date->format('Ymd'))
-            ->set('ts_ym', (int)$date->format('Ym'));
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'gdbots:enrichments:mixin:time-sampling.enrich' => ['enrich', 5000],
-        ];
+            ->set(TimeSamplingV1Mixin::TS_YMDH_FIELD, (int)$date->format('YmdH'))
+            ->set(TimeSamplingV1Mixin::TS_YMD_FIELD, (int)$date->format('Ymd'))
+            ->set(TimeSamplingV1Mixin::TS_YM_FIELD, (int)$date->format('Ym'));
     }
 }

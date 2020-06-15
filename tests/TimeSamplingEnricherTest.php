@@ -13,7 +13,7 @@ class TimeSamplingEnricherTest extends TestCase
     public function testEnrich()
     {
         $command = Fixtures\FakeCommand::create();
-        $command->set('occurred_at', Microtime::fromFloat((new \DateTime('2015-12-25T01:15:30.123456Z'))->format('U.u')));
+        $command->set('occurred_at', Microtime::fromDateTime(new \DateTime('2015-12-25T01:15:30.123456Z')));
         $enricher = new TimeSamplingEnricher();
         $pbjxEvent = new PbjxEvent($command);
 
