@@ -4,15 +4,17 @@ declare(strict_types=1);
 namespace Gdbots\Tests\Enrichments;
 
 use Gdbots\Enrichments\UaParserEnricher;
+use Gdbots\Pbj\WellKnown\NodeRef;
 use Gdbots\Pbjx\Event\PbjxEvent;
 use Gdbots\Schemas\Contexts\UserAgentV1;
+use Gdbots\Schemas\Ncr\Event\NodePublishedV1;
 use PHPUnit\Framework\TestCase;
 
 class UaParserEnricherTest extends TestCase
 {
     public function testEnrich()
     {
-        $command = Fixtures\FakeCommand::create();
+        $command = NodePublishedV1::create()->set('node_ref', NodeRef::fromString('acme:article:123'));
         $command->set('ctx_ua', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0');
         $enricher = new UaParserEnricher();
         $pbjxEvent = new PbjxEvent($command);
