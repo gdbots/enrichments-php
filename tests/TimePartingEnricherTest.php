@@ -23,9 +23,9 @@ class TimePartingEnricherTest extends TestCase
 
         $enricher->enrich($pbjxEvent);
 
-        $this->assertSame(Month::DECEMBER(), $command->get('month_of_year'));
+        $this->assertSame(Month::DECEMBER, $command->get('month_of_year'));
         $this->assertSame(25, $command->get('day_of_month'));
-        $this->assertSame(DayOfWeek::FRIDAY(), $command->get('day_of_week'));
+        $this->assertSame(DayOfWeek::FRIDAY, $command->get('day_of_week'));
         $this->assertSame(false, $command->get('is_weekend'));
         $this->assertSame(1, $command->get('hour_of_day'));
     }

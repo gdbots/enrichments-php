@@ -17,7 +17,7 @@ final class UaParserEnricher implements EventSubscriber, PbjxEnricher
     private LoggerInterface $logger;
     private Parser $parser;
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'gdbots:enrichments:mixin:ua-parser.enrich' => ['enrich', 5000],
