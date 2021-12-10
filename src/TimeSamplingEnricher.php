@@ -10,7 +10,7 @@ use Gdbots\Pbjx\EventSubscriber;
 
 final class TimeSamplingEnricher implements EventSubscriber, PbjxEnricher
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'gdbots:enrichments:mixin:time-sampling.enrich' => ['enrich', 5000],
@@ -20,7 +20,7 @@ final class TimeSamplingEnricher implements EventSubscriber, PbjxEnricher
     public function enrich(PbjxEvent $pbjxEvent): void
     {
         $message = $pbjxEvent->getMessage();
-        $date = $message->get('occurred_at');
+        $date = $message->get('occurred_at') ?: $message->get('created_at');
 
         if ($date instanceof Microtime) {
             $date = $date->toDateTime();

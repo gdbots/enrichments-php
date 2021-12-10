@@ -1,8 +1,6 @@
 enrichments-php
 =============
 
-[![Build Status](https://api.travis-ci.org/gdbots/enrichments-php.svg)](https://travis-ci.org/gdbots/enrichments-php)
-
 Php library that provides implementations for __gdbots:enrichments__ schemas.   Using this library assumes
 that you've already created and compiled your own pbj classes using the [Pbjc](https://github.com/gdbots/pbjc-php)
 and are making use of the __"gdbots:enrichments:mixin:*"__ mixins from [gdbots/schemas](https://github.com/gdbots/schemas).
